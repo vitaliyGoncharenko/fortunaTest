@@ -29,14 +29,12 @@ public class ClientActor extends UntypedActor {
             LOGGER.info("Rezult: \n"+message.toString());
             write(message.toString());
             LOGGER.info("Exit program");
-            System.exit(0);
+            getContext().system().shutdown();
         }
     }
 
     @Override
     public void postStop() throws Exception {
-        firstWorker.tell(PoisonPill.getInstance(),ActorRef.noSender());
-        context().system().shutdown();
         LOGGER.info("Client stop");
     }
 
@@ -52,7 +50,6 @@ public class ClientActor extends UntypedActor {
 
         } catch (IOException e) {
             LOGGER.error("Read from " + nameFile + " is fail",e ,e.getMessage());
-            e.printStackTrace();
         } finally {
             try {
                 if (br != null) br.close();
